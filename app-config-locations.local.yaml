@@ -1,0 +1,13 @@
+#catalog:
+  locations:
+    # GitHub org
+    - type: github-org
+      target: https://github.com/scatter-ly
+    
+    # URL (must be public)
+    - type: url
+      target: https://github.com/scatter-ly/public-test/blob/main/oc-catalog.yaml
+
+    # GitHub discovery
+    - type: github-discovery
+      target: https://github.com/scatter-ly
