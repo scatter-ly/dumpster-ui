@@ -1,0 +1,6 @@
+codecomponent:
+  service: scatter-ly/dumpster-prod
+  lifecycle: production
+  priority: 1
+  sla: 24x7
+  dependsOn: [aux-component:scatter-ly/map-thingy]

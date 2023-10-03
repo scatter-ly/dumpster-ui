@@ -1,4 +1,17 @@
 apiVersion: opencontext.com/v1alpha1
+kind: AuxComponent
+metadata:
+  name: map-thingy
+  title: Map thingy
+  description: Prototyping toolkit for maps
+spec:
+  type: tool
+  lifecycle: planning
+  owner: [scatter-ly/eng-raccoon-eco, scatter-ly/prod-raccoon-ent]
+  service: scatter-ly/dumpster-prod
+  uri: https://example.com/website
+---
+apiVersion: opencontext.com/v1alpha1
 kind: PlatformComponent
 metadata:
   namespace: scatter-ly
