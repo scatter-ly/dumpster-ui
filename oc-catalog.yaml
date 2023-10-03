@@ -1,0 +1,131 @@
+apiVersion: opencontext.com/v1alpha1
+kind: PlatformComponent
+metadata:
+  namespace: scatter-ly
+  name: dumpster-config
+  description: Dumpster config bucket
+  links:
+    - url: https://console.cloud.google.com
+      title: GCP Cloud Console
+      icon: cloud
+    - url: https://example.com/dumpster-config-docs
+      title: Dumpster config docs
+      icon: docs
+  annotations:
+    pagerduty.com/service-id: P7MFATB
+spec:
+  type: gcs
+  subtype: public
+  lifecycle: production
+  owner: [scatter-ly/eng-raccoon-cloud]
+  service: [scatter-ly/crates, scatter-ly/dumpster-prod]
+  datacenter: [scatter-ly/gcp]
+  dependencyOf: [platform-component:scatter-ly/dumpster-db, code-component:scatter-ly/dumpster-ui]
+  priority: 2
+  sla: 24x5
+---
+apiVersion: opencontext.com/v1alpha1
+kind: PlatformComponent
+metadata:
+  namespace: scatter-ly
+  name: dumpster-db
+  description: Dumpster primary data store
+  links:
+    - url: https://example.com/cloud
+      title: Cloud Console
+      icon: cloud
+    - url: https://example.com/dashboard
+      title: Dumpster DB Dashboard
+      icon: dashboard
+spec:
+  type: database
+  subtype: 'postgresql 14'
+  lifecycle: production
+  owner: [person:scatter-ly/alctest-int]
+  service: [scatter-ly/dumpster-prod]
+  datacenter: [scatter-ly/aws]
+  priority: 1
+  sla: 12x7
+---
+apiVersion: opencontext.com/v1alpha1
+kind: PlatformComponent
+metadata:
+  namespace: scatter-ly
+  name: dumpster-secrets
+  description: Dumpster secrets bucket
+spec:
+  type: s3
+  subtype: public
+  lifecycle: production
+  owner: [scatter-ly/eng-raccoon]
+  service: [scatter-ly/dumpster-prod]
+  datacenter: [scatter-ly/aws]
+  dependencyOf:
+    [
+      platform-component:scatter-ly/dumpster-db,
+      code-component:scatter-ly/dumpster-ui,
+      platform-component:scatter-ly/retail-vm,
+    ]
+  uri: s3://crates-config
+  priority: 3
+  sla: 24x5
+---
+apiVersion: opencontext.com/v1alpha1
+kind: PlatformComponent
+metadata:
+  namespace: scatter-ly
+  name: dumpster-vm
+  description: Dumpster virtual machine
+  links:
+    - url: https://example.com/cloud
+      title: Cloud Console
+      icon: cloud
+    - url: https://example.com/dashboard
+      title: Dumpster VM Dashboard
+      icon: dashboard
+spec:
+  type: vm
+  subtype: e2-medium
+  lifecycle: production
+  owner: [scatter-ly/it-ops]
+  service: [scatter-ly/retail]
+  datacenter: [scatter-ly/aws, scatter-ly/gcp]
+  dependsOn:
+    [
+      'platform-component:dumpster-lb',
+      'platform-component:dumpster-secrets',
+      'platform-component:dumpster-config',
+    ]
+  dependencyOf: ['code-component:dumpster-ui']
+  priority: 1
+  sla: 24x7
+---
+apiVersion: opencontext.com/v1alpha1
+kind: PlatformComponent
+metadata:
+  namespace: scatter-ly
+  name: dumpster-lb
+  description: Dumpster loadbalancer
+  links:
+    - url: https://example.com/cloud
+      title: Cloud Console
+      icon: cloud
+    - url: https://example.com/dashboard
+      title: Dumpster loadbalancer Dashboard
+      icon: dashboard
+spec:
+  type: loadbalancer
+  subtype: application
+  lifecycle: production
+  owner: [scatter-ly/it-ops]
+  service: [scatter-ly/retail]
+  datacenter: [scatter-ly/aws, scatter-ly/gcp]
+  dependsOn:
+    [
+      'platform-component:scatter-ly/dumpster-lb',
+      'platform-component:scatter-ly/dumpster-secrets',
+      'platform-component:scatter-ly/dumpster-config',
+    ]
+  dependencyOf: ['code-component:scatter-ly/dumpster-ui']
+  priority: 1
+  sla: 24x7  
