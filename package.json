@@ -7,7 +7,7 @@
     "role": "node-library"
   },
   "engines": {
-    "node": "16"
+    "node": "18"
   },
   "main": "dist/index.js",
   "dependencies": {
@@ -47,8 +47,7 @@
     "artifactregistry-login": "npx google-artifactregistry-auth",
     "lint": "eslint --ext .js,.ts .",
     "prettier:check": "prettier --check .",
-    "lock:check": "yarn-lock-check",
-    "postinstall": "npx typesync"
+    "lock:check": "yarn-lock-check"
   },
   "prettier": "@spotify/prettier-config",
   "lint-staged": {
@@ -62,5 +61,6 @@
     "*.{json,md}": [
       "prettier --write"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }
